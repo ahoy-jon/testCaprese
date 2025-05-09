@@ -34,7 +34,7 @@ object WithMonad:
     a => f.map(_(a))
 
   def pushLeft[A, B](f: A -> Option[A]): Option[A -> B] =
-    ??? // not possible to implement
+    None // not possible to implement
 
 
 class Context @publicInBinary private extends caps.Capability:
