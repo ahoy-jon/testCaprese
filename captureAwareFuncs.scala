@@ -5,9 +5,11 @@ import scala.util.control.{ControlThrowable, NoStackTrace}
 
 
 object WithContext:
+  //safe
   def pushRight[A, B](f: Context ?-> A -> B): A -> Context ?-> B =
     a => f(a)
 
+  //unsafe without CaptureChecking
   def pushLeft[A, B](f: A -> Context ?-> B): Context ?-> A => B =
 
     /**
@@ -29,6 +31,9 @@ object WithContext:
      */
     a => f(a)
 
+  def pushLeftGeneric[A, B](f: Context ?-> A -> Context ?-> B): Context ?-> A => B =
+    a => f(a)
+
 object WithMonad:
   def pushRight[A, B](f: Option[A -> B]): A -> Option[B] =
     a => f.map(_(a))
@@ -43,6 +48,18 @@ class Context @publicInBinary private extends caps.Capability:
 object Context:
   inline def none(using context: Context): Nothing = context.none
 
+  //pushing `Right`
+  /*
+  inline def runF[A, B](inline body: Context ?=> A => Context ?=> B): A -> Option[B] =
+    a =>
+      given Context = Context()
+
+      try
+        Option(body(a))
+      catch
+        case ControlNone => None
+  */
+
   inline def run[A](inline body: Context ?=> A): Option[A] =
     try
       Option(body(using Context()))
@@ -51,3 +68,34 @@ object Context:
 
   private object ControlNone extends ControlThrowable("None") with NoStackTrace:
     given CanEqual[ControlNone.type, Throwable] = CanEqual.derived
+
+
+object Usage:
+  type PrgL = Context ?-> Int -> String
+  type PrgG = Context ?-> Int => String //Context ?-> (Int -> String)^
+  type PrgR = Int -> Context ?-> String
+
+  val prgL_0: PrgL = Context.none
+  //val prgL_1: PrgL = _ => Context.none // do not compile
+  val prgL_2: PrgL = i => "toto".take(i)
+  //val prgL_3: PrgL = i => if(i == 0) Context.none else "toto" //do not compile
+
+  //val prgR_0: PrgR = Context.none //do not compile
+  val prgR_1: PrgR = _ => Context.none
+  val prgR_2: PrgR = i => "toto".take(i)
+  val prgR_3: PrgR = i => if (i == 0) Context.none else "toto"
+
+  val prgG_0: PrgG = Context.none
+  val prgG_1: PrgG = _ => Context.none
+  val prgG_2: PrgG = i => "toto".take(i)
+  val prgG_3: PrgG = i => if (i == 0) Context.none else "toto"
+
+  val pushed_1: PrgG = WithContext.pushLeft(prgR_1)
+  val pushed_2: PrgG = WithContext.pushLeftGeneric(prgR_1)
+  val pushed_3: PrgG = prgL_0
+  val pushed_4: PrgG = WithContext.pushLeftGeneric(a => prgL_0(a)) //doesn't work directly
+
+  val res_1: Option[Int -> String] = Context.run(prgL_0)
+
+  val res_2: Option[Int -> Context ?-> String] = Context.run(prgR_1) //Cannot escape
+  val res_3: Int -> Option[String] = a => Context.run(prgR_1(a))
