@@ -19,13 +19,13 @@ object WithContext:
      * Context ?-> (A -> B)^
      * (ct: Context) ?-> (A -> B)^{ct} //redundant
      * (ct: Context) ?-> A ->{ct} B //redundant
-     * (using ct:Context): A ->{ct} B
+     * (using ct:Context): A ->{ct} B //correct
      * Context ?-> A -> Context ?-> B //verbose
      *
      * invalid:
      * Context ?-> A -> B // Context^ is not allowed capture set
-     * (ct: Context) ?-> A -> B^{ct}
-     * `Context ?-> A -> B^`
+     * (ct: Context) ?-> A -> B^{ct} // Same
+     * `Context ?-> A -> B^`// Same
      */
     a => f(a)
 
