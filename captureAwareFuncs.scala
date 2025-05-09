@@ -123,3 +123,5 @@ object Usage:
 
   //There are probably better inlining possible, to Int -> String
   val res_10: Option[Int -> String] = Context.run(i => prgR_d2(i))
+  //might be possible to work this case with a macro
+  //val res_11: Int -> String = prgR_d2 // should work, this definition is not using the Capability
