@@ -82,7 +82,7 @@ object Usage:
 
   //val prgR_0: PrgR = Context.none //do not compile
   val prgR_1: PrgR = _ => Context.none
-  val prgR_2: PrgR = i => "toto".take(i)
+
   val prgR_3: PrgR = i => if (i == 0) Context.none else "toto"
 
   val prgG_0: PrgG = Context.none
@@ -103,8 +103,11 @@ object Usage:
 
   // INLINING
   inline def prgG_d0: PrgG = Context.none
+
   inline def prgG_d1: PrgG = _ => Context.none
+
   inline def prgG_d2: PrgG = i => "toto".take(1)
+
   inline def prgG_d3: PrgG = i => if (i == 0) Context.none else "toto"
 
 
@@ -115,3 +118,8 @@ object Usage:
   val res_8: Option[Int -> String] = Context.run(prgG_d2)
   //val res_9: Option[Int -> String] = Context.run(prgG_d3) // do not compile
   val res_9: Int -> Option[String] = a => Context.run(prgG_d3(a))
+
+  inline def prgR_d2: PrgR = i => "toto".take(i)
+
+  //There are probably better inlining possible, to Int -> String
+  val res_10: Option[Int -> String] = Context.run(i => prgR_d2(i))
