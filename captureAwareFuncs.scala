@@ -72,7 +72,7 @@ object Context:
 
 object Usage:
   type PrgL = Context ?-> Int -> String
-  type PrgG = Context ?-> Int => String //Context ?-> (Int -> String)^
+  type PrgG = Context ?-> (Int -> String)^ //Context ?-> (Int -> String)^
   type PrgR = Int -> Context ?-> String
 
   val prgL_0: PrgL = Context.none
@@ -99,3 +99,19 @@ object Usage:
 
   val res_2: Option[Int -> Context ?-> String] = Context.run(prgR_1) //Cannot escape
   val res_3: Int -> Option[String] = a => Context.run(prgR_1(a))
+  val res_4: Int -> Option[String] = a => Context.run(prgG_1(a))
+
+  // INLINING
+  inline def prgG_d0: PrgG = Context.none
+  inline def prgG_d1: PrgG = _ => Context.none
+  inline def prgG_d2: PrgG = i => "toto".take(1)
+  inline def prgG_d3: PrgG = i => if (i == 0) Context.none else "toto"
+
+
+  // In this case, prgG_d0 (Context ?-> (A -> B)^) is turned into (Context ?=> (A -> B))
+  val res_5: Option[Int -> String] = Context.run(prgG_d0)
+  //val res_6: Option[Int => String] = Context.run(prgG_d1) // do not compile
+  val res_7: Int -> Option[String] = a => Context.run(prgG_d1(a))
+  val res_8: Option[Int -> String] = Context.run(prgG_d2)
+  //val res_9: Option[Int => String] = Context.run(prgG_d3) // do not compile
+  val res_9: Int -> Option[String] = a => Context.run(prgG_d3(a))
