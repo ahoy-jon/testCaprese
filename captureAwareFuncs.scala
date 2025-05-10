@@ -38,7 +38,7 @@ object WithMonad:
   def pushRight[A, B](f: Option[A -> B]): A -> Option[B] =
     a => f.map(_(a))
 
-  def pushLeft[A, B](f: A -> Option[A]): Option[A -> B] =
+  def pushLeft[A, B](f: A -> Option[B]): Option[A -> B] =
     None // not possible to implement
 
 
