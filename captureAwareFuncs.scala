@@ -102,26 +102,26 @@ object Usage:
   val res_4: Int -> Option[String] = a => Context.run(prgG_1(a))
 
   // INLINING
-  inline def prgG_d0: PrgG = Context.none
+  inline def def_prgG_0: PrgG = Context.none
 
-  inline def prgG_d1: PrgG = _ => Context.none
+  inline def def_prgG_1: PrgG = _ => Context.none
 
-  inline def prgG_d2: PrgG = i => "toto".take(1)
+  inline def def_prgG_2: PrgG = i => "toto".take(1)
 
-  inline def prgG_d3: PrgG = i => if (i == 0) Context.none else "toto"
+  inline def def_prgG_3: PrgG = i => if (i == 0) Context.none else "toto"
 
 
   // In this case, prgG_d0 (Context ?-> (A -> B)^) is turned into (Context ?=> (A -> B))
-  val res_5: Option[Int -> String] = Context.run(prgG_d0)
+  val res_5: Option[Int -> String] = Context.run(def_prgG_0)
   //val res_6: Option[Int -> String] = Context.run(prgG_d1) // do not compile
-  val res_7: Int -> Option[String] = a => Context.run(prgG_d1(a))
-  val res_8: Option[Int -> String] = Context.run(prgG_d2)
+  val res_7: Int -> Option[String] = a => Context.run(def_prgG_1(a))
+  val res_8: Option[Int -> String] = Context.run(def_prgG_2)
   //val res_9: Option[Int -> String] = Context.run(prgG_d3) // do not compile
-  val res_9: Int -> Option[String] = a => Context.run(prgG_d3(a))
+  val res_9: Int -> Option[String] = a => Context.run(def_prgG_3(a))
 
-  inline def prgR_d2: PrgR = i => "toto".take(i)
+  inline def def_prgR_2: PrgR = i => "toto".take(i)
 
   //There are probably better inlining possible, to Int -> String
-  val res_10: Option[Int -> String] = Context.run(i => prgR_d2(i))
+  val res_10: Option[Int -> String] = Context.run(i => def_prgR_2(i))
   //might be possible to work this case with a macro
   //val res_11: Int -> String = prgR_d2 // should work, this definition is not using the Capability
