@@ -1,21 +1,5 @@
 package captureAware
 
-import scala.annotation.publicInBinary
-import scala.util.control.{ControlThrowable, NoStackTrace}
-
-
-//with explicit null activated
-type Option[A] = A | Null
-inline def None: Null = null
-
-given [X]: CanEqual[X | Null, Null] = CanEqual.derived
-
-extension [A](a: A | Null)
-  inline def map[B](f: A => B): B | Null =
-    if (a == null) null else f(a)
-
-
-def Option[A](a: A | Null): A | Null = a
 
 object WithContext:
   //safe
@@ -54,33 +38,6 @@ object WithMonad:
   def pushLeft[A, B](f: A -> Option[B]): Option[A -> B] =
     None // not possible to implement
 
-
-class Context @publicInBinary private extends caps.Capability:
-  inline def none: Nothing = throw Context.ControlNone
-
-object Context:
-  inline def none(using context: Context): Nothing = context.none
-
-  //pushing `Right`
-  /*
-  inline def runF[A, B](inline body: Context ?=> A => Context ?=> B): A -> Option[B] =
-    a =>
-      given Context = Context()
-
-      try
-        Option(body(a))
-      catch
-        case ControlNone => None
-  */
-
-  inline def run[A](inline body: Context ?=> A): Option[A] =
-    try
-      Option(body(using Context()))
-    catch
-      case ControlNone => None
-
-  private object ControlNone extends ControlThrowable("None") with NoStackTrace:
-    given CanEqual[ControlNone.type, Throwable] = CanEqual.derived
 
 
 object Usage:
