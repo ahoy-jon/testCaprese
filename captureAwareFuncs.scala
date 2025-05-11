@@ -4,6 +4,19 @@ import scala.annotation.publicInBinary
 import scala.util.control.{ControlThrowable, NoStackTrace}
 
 
+//with explicit null activated
+type Option[A] = A | Null
+inline def None: Null = null
+
+given [X]: CanEqual[X | Null, Null] = CanEqual.derived
+
+extension [A](a: A | Null)
+  inline def map[B](f: A => B): B | Null =
+    if (a == null) null else f(a)
+
+
+def Option[A](a: A | Null): A | Null = a
+
 object WithContext:
   //safe
   def pushRight[A, B](f: Context ?-> A -> B): A -> Context ?-> B =
@@ -72,7 +85,7 @@ object Context:
 
 object Usage:
   type PrgL = Context ?-> Int -> String
-  type PrgG = Context ?-> (Int -> String)^
+  type PrgG = (Context ?-> (Int -> String)^)
   type PrgR = Int -> Context ?-> String
 
   val prgL_0: PrgL = Context.none
@@ -122,6 +135,6 @@ object Usage:
   inline def def_prgR_2: PrgR = i => "toto".take(i)
 
   //There are probably better inlining possible, to Int -> String
-  val res_10: Option[Int -> String] = Context.run(i => def_prgR_2(i))
   //might be possible to work this case with a macro
   //val res_11: Int -> String = prgR_d2 // should work, this definition is not using the Capability
+  val res_10: Option[Int -> String] = Context.run(i => def_prgR_2(i))

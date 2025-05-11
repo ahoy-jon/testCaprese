@@ -1,11 +1,12 @@
 //> using scala 3.7.0
 
-//> using options -Wconf:msg=(unused.*value|discarded.*value|pure.*statement):error
-//> using options -Wnonunit-statement
-//> using options -Wvalue-discard
-//> using options -language:strictEquality
-//> using options -language:experimental.captureChecking
-//> using options -Xprint:cc Prints
+//> using option -Wconf:msg=(unused.*value|discarded.*value|pure.*statement):error
+//> using option -Wnonunit-statement
+//> using option -Wvalue-discard
+//> using option -language:strictEquality
+//> using option -language:experimental.captureChecking
+////> using option -Xprint:cc Prints
+//> using option -Yexplicit-nulls
 //> using option -Xkind-projector:underscores
 
 //> using dependency io.getkyo::kyo-core::0.18.0
