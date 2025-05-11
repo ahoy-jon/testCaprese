@@ -9,6 +9,8 @@
 //> using option -Yexplicit-nulls
 //> using option -Xkind-projector:underscores
 
+
+//> using compileOnly.dependencies org.scala-lang::scala3-compiler:3.7.0
 //> using dependency io.getkyo::kyo-core::0.18.0
 //> using dependency io.getkyo::kyo-direct::0.18.0
 //> using dependency io.getkyo::kyo-prelude::0.18.0

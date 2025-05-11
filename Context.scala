@@ -1,6 +1,5 @@
 package captureAware
 
-import scala.quoted.*
 import scala.annotation.publicInBinary
 import scala.util.control.{ControlThrowable, NoStackTrace}
 
@@ -14,17 +13,8 @@ object Context:
   private object ControlNone extends ControlThrowable("None") with NoStackTrace:
     given CanEqual[ControlNone.type, Throwable] = CanEqual.derived
 
-  transparent inline def run[A](inline body: Context ?=> A): Option[A] = ${ unImpl('body) }
-
-  def unImpl[A](body: Expr[Context ?=> A])(using Quotes, Type[A]): Expr[Option[A]] = {
-    println(body.show)
-    '{
-      try
-        Option($body(using new Context()))
-      catch
-        case Context.ControlNone => None
-    }
-  }
-
-
-
+  transparent inline def run[A](inline body: Context ?=> A): Option[A] =
+    try
+      Option(body(using new Context()))
+    catch
+      case Context.ControlNone => None
