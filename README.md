@@ -42,12 +42,12 @@ It shows the problem with Context Functions and control flow.
 
 ### captureAwareFuncs
 In [captureAwareFuncs](./captureAwareFuncs.scala):
-It show how to manipulate, with capture checking functions like:
+It show how to manipulate functions like:
 ```scala
 val f1: Context ?-> A -> B
 val f2: A -> Context ?-> B
 ```
-And show some interesting results, how safely we can write:
+And show some interesting results. For example, it's safe to write:
 ```scala
 def f(a: A): B
 
@@ -58,7 +58,7 @@ val h: (A -> B) | Null = Context.run(a => g(a))
 
 # misc
 
-The project is written with explicit Nulls, instead of Options, to explore if more safe inlining is possible, like:
+The project is written with explicit Nulls, instead of Options, to explore if inlining can be more precise.
 ```scala
 //> using option -language:strictEquality
 //> using option -language:experimental.captureChecking
