@@ -9,6 +9,12 @@ This project demonstrates:
 - How context functions can lead to unsafe behaviors.
 - How **Capture Checking** detects and prevents these issues.
 
+## run tests
+With Scala-CLI:
+```bash
+scala test .
+```
+
 ## unsafe behaviours
 
 Context functions behave similarly to implicits, they can capture context values *without explicit tracking*.  
