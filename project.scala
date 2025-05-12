@@ -18,3 +18,5 @@
 
 //> using dependency io.github.iltotore::iron:3.0.1
 //> using dependency io.scalaland::chimney:2.0.0-M1
+
+//> using test.dependency org.scalameta::munit::1.1.1

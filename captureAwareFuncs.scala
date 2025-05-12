@@ -65,11 +65,11 @@ object Usage:
   val pushed_3: PrgG = prgL_0
   val pushed_4: PrgG = WithContext.pushLeftGeneric(a => prgL_0(a)) //doesn't work directly
 
-  val res_1: Option[Int -> String] = Context.run(prgL_0)
+  val res_1: OrNull[Int -> String] = Context.run(prgL_0)
 
-  val res_2: Option[Int -> Context ?-> String] = Context.run(prgR_1) //Cannot escape
-  val res_3: Int -> Option[String] = a => Context.run(prgR_1(a))
-  val res_4: Int -> Option[String] = a => Context.run(prgG_1(a))
+  val res_2: OrNull[Int -> Context ?-> String] = Context.run(prgR_1) //Cannot escape
+  val res_3: Int -> OrNull[String] = a => Context.run(prgR_1(a))
+  val res_4: Int -> OrNull[String] = a => Context.run(prgG_1(a))
 
   // INLINING
   inline def def_prgG_0: PrgG = Context.none
@@ -82,16 +82,16 @@ object Usage:
 
 
   // In this case, prgG_d0 (Context ?-> (A -> B)^) is turned into (Context ?=> (A -> B))
-  val res_5: Option[Int -> String] = Context.run(def_prgG_0)
+  val res_5: OrNull[Int -> String] = Context.run(def_prgG_0)
   //val res_6: Option[Int -> String] = Context.run(prgG_d1) // do not compile
-  val res_7: Int -> Option[String] = a => Context.run(def_prgG_1(a))
-  val res_8: Option[Int -> String] = Context.run(def_prgG_2)
+  val res_7: Int -> OrNull[String] = a => Context.run(def_prgG_1(a))
+  val res_8: OrNull[Int -> String] = Context.run(def_prgG_2)
   //val res_9: Option[Int -> String] = Context.run(prgG_d3) // do not compile
-  val res_9: Int -> Option[String] = a => Context.run(def_prgG_3(a))
+  val res_9: Int -> OrNull[String] = a => Context.run(def_prgG_3(a))
 
   inline def def_prgR_2: PrgR = i => "toto".take(i)
 
   //There are probably better inlining possible, to Int -> String
   //might be possible to work this case with a macro
-  //val res_11: Int -> String = prgR_d2 // should work, this definition is not using the Capability
-  val res_10: Option[Int -> String] = Context.run(i => def_prgR_2(i))
+  //val res_10: Int -> String = prgR_d2 // could work, this definition is not using the Capability
+  val res_10: OrNull[Int -> String] = Context.run(i => def_prgR_2(i))

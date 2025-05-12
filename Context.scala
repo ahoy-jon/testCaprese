@@ -13,8 +13,8 @@ object Context:
   private object ControlNone extends ControlThrowable("None") with NoStackTrace:
     given CanEqual[ControlNone.type, Throwable] = CanEqual.derived
 
-  transparent inline def run[A](inline body: Context ?=> A): Option[A] =
+  transparent inline def run[A](inline body: Context ?=> A): OrNull[A] =
     try
-      Option(body(using new Context()))
+      body(using new Context())
     catch
-      case Context.ControlNone => None
+      case Context.ControlNone => null
