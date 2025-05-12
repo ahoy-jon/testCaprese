@@ -72,3 +72,7 @@ inline def g: A -> Context ?-> B = f
 
 val h: A -> B = Context.run(a => g(a))
 ```
+
+# links
+* [YAES, RT](https://github.com/rcardin/yaes/discussions/33)
+* [Capture Checking Documentation](https://docs.scala-lang.org/scala3/reference/experimental/cc.html)
