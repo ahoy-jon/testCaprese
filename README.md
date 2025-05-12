@@ -32,7 +32,7 @@ def swapLeft(f: A  => C ?=> B):
 | `C` is a resource (e.g., file, DB) | Leaky | May leak or escape its intended scope |
 | `C` controls flow/errors           | No    | Can break safety and semantics        |
 
-Caprese solve those issue, and track the need/use of `C`.
+Caprese solve those issues, and track the need/use of `C`.
 
 ## tests
 
