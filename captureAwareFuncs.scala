@@ -95,3 +95,10 @@ object Usage:
   //might be possible to work this case with a macro
   //val res_10: Int -> String = prgR_d2 // could work, this definition is not using the Capability
   val res_10: OrNull[Int -> String] = Context.run(i => def_prgR_2(i))
+
+  trait inlineShowCase[A, B]:
+    def f(a: A): B
+
+    inline def g: A -> Context ?-> B = f
+
+    val h: (A -> B) | Null = Context.run(a => g(a))
